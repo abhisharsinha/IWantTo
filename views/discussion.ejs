@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CHal</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    </head>
+    <body>
+
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" />
+            <input id="interest" autocomplete="off" /><button>Send</button>
+        </form>
+        <script src = "/socket.io/socket.io.js"></script>
+        <script>
+          const socket = io();
+          var form = document.getElementById('form');
+          var input = document.getElementById('input');
+          var interest = document.getElementById('interest');
+          var messages = document.getElementById('messages');
+
+          form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+              socket.emit('chat message', {message: input.value, interest: interest.value});
+              input.value = '';
+            }
+            });
+
+          socket.on('chat message', function(data) {
+            var item = document.createElement('li');
+            item.textContent = data.message;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+          });
+
+        </script>
+    </body>
+</html>
+
