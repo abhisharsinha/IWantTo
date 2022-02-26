@@ -16,9 +16,18 @@ app.use(express.static('static'));
 app.use(cookieSession({
   name: 'google-auth-session',
   keys: ['key1', 'key2']
-}))
+}));
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
+app.use(session({secret: "trial"}))
+
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+)
+
+app.use(express.json())
 
 passport.use(new GoogleStrategy({
     clientID:"1074242406000-60kbrbt2fmdfsrvkmo259qu638266lqo.apps.googleusercontent.com",
@@ -27,7 +36,6 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return done(null, profile);
     }
   
@@ -38,25 +46,23 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
         done(null, user);
 });
-// app.use('/', express.static('/'))
 
 // Make sure this is defined before any of your routes
 // that make use of the session.
 
 app.get("/", function(req, res) {
-  // res.sendFile(path.join(__dirname + '/views/index.html'))
   res.render("index");
 });
 
 app.get("/home", function(req, res) {
   var sess = req.session.passport;
-  // console.log(sess);
   if (typeof sess === 'undefined') {
-    console.log("Inside if undef")
-    console.log(sess)
     res.redirect('/');
+  } else if (typeof req.session.username === "undefined") {
+    res.redirect('/avatar');
+  } else if (typeof req.session.interests === "undefined") {
+    res.redirect('/interest');
   } else {
-    // res.sendFile(path.join(__dirname + '/views/home.html'))
     res.render("home");
   }
 });
@@ -80,7 +86,6 @@ io.on('connection', function(socket) {
    socket.on('chat message', (data) => {
                 console.log('message: ' + data.message);
                 socket.join(data.interest);
-                // io.emit('chat message', msg);
                 io.sockets.in('hockey').emit('chat message', {message: data.message});
               });
 
@@ -99,9 +104,6 @@ app.get('/discussion', function(req, res) {
     // res.write('<p>user: ' + sess.user + '</p>');
     // res.write('<p>expires in: ' + (sess.cookie.maxAge / 1000) + 's</p>');
     // res.end();
-    // res.sendFile('./discussion.html')
-
-    // res.sendFile(path.join(__dirname + '/views/discussion.html'))
     res.render("discussion");
   }
 });
@@ -117,7 +119,7 @@ app.get( '/google/callback',
   }),
   function (req, res) {
     console.log("Success login")
-      res.redirect('/home')
+    res.redirect('/home')
 });
 
 app.get("/logout", function(req, res){
@@ -127,16 +129,48 @@ app.get("/logout", function(req, res){
 });
 
 app.get("/interest", function(req, res){
-  // res.sendFile(path.join(__dirname + '/views/interest.html'))
-  res.render("interest", {name: req.session.passport.user.given_name});
+  var sess = req.session.passport;
+  if (typeof sess === 'undefined') {
+    res.redirect('/');
+  } else if (typeof req.session.username === "undefined") {
+    res.redirect("/avatar");
+  } else if (typeof req.session.interests === "undefined") {
+    res.render("interest", {name: sess.user.given_name});
+  } else {
+    // If the user had added interests earlier then goto home
+    res.redirect("/home");
+  }
 });
 
-app.get("/avatar", function(req, res){
-  // First check if the session is valid
-  res.render("avatar", {fname: req.session.passport.user.given_name,
-  lname: req.session.passport.user.family_name,
-  email: req.session.passport.user.email,
-  pic: req.session.passport.user.picture});
+app.post("/interest", function(req, res) {
+  // push to dataset
+  req.session.interests = ["cricket", "hockey"];
+  res.redirect("/home");
+});
+
+app.get("/avatar", function(req, res) {
+  var sess = req.session.passport;
+  if (typeof sess === 'undefined') {
+    res.redirect('/');
+  } else if (typeof req.session.username === "undefined") {
+      res.render("avatar", {fname: sess.user.given_name,
+        lname: sess.user.family_name,
+        email: sess.user.email,
+        pic: sess.user.picture});
+  }  else {
+    // If the user had filled the details earlier
+    // then don't goto avatar
+    res.redirect("interest");
+  }
+});
+
+app.post("/avatar", function(req, res){
+  var username = req.body.username;
+  // Verify if the username using db
+  console.log(req.body);
+  req.session.username = username;
+  console.log(req.session.username);
+  res.redirect("/interest");
 });
 
 server.listen(port, () => {console.log(`Example app listening on port ${port}`)})
