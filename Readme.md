@@ -107,7 +107,7 @@ _Installation depedency_
    ```sh
    git clone https://github.com/abhisharsinha/IWantTo.git
    ```
-3. Enter your Google OAUTH API in `config.js`
+3. Enter your Google OAUTH API in `app.js` 
    ```js
    const CLIENT_ID = 'ENTER YOUR Client ID';
    const CLIENT_SECRET = 'ENTER YOUR Client secret'
@@ -145,6 +145,9 @@ _Installation depedency_
   ```sh
   npm install googleapis@39 --save
   ```
+12. Updeate node.js
+```sh
+
   or to install them all run
   ```sh
    sh requirements.sh
