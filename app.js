@@ -11,6 +11,8 @@ var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const cookieSession = require('cookie-session');
 const routes = require('./routes')
+const CLIENT_ID = "YOUR GOOGLE OAUTH CLIENT ID"
+const CLIENT_SECRET = "YOUR GOOGLE OAUTH CLIENT SECRET"
 
 
 app.set('view engine', 'ejs');
@@ -44,8 +46,8 @@ io.use(function(socket, next) {
 app.use(sessionMiddleware);
 
 passport.use(new GoogleStrategy({
-    clientID:"1074242406000-60kbrbt2fmdfsrvkmo259qu638266lqo.apps.googleusercontent.com",
-    clientSecret: "Kdhtr6b6QZ9n_CRbrrMErVHP",
+    clientID:CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
     callbackURL: "http://localhost:8000/google/callback",
     passReqToCallback   : true
   },
