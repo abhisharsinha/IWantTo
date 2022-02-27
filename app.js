@@ -11,7 +11,7 @@ var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const cookieSession = require('cookie-session');
 app.set('view engine', 'ejs');
-app.use(express.static('static'));
+app.use("/static", express.static('static'));
 
 // To parse the html request
 app.use(
@@ -28,7 +28,17 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({secret: "trial"}))
+var sessionMiddleware = session({secret: "trial",
+resave: true,
+saveUninitialized: true});
+
+// register middleware in Socket.IO
+// app.use(sessionMiddleware);
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res || {}, next);
+});
+
+app.use(sessionMiddleware);
 
 passport.use(new GoogleStrategy({
     clientID:"1074242406000-60kbrbt2fmdfsrvkmo259qu638266lqo.apps.googleusercontent.com",
@@ -38,9 +48,7 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
       return done(null, profile);
-    }
-  
-));
+    }));
 passport.serializeUser(function(user, done) {
         done(null, user);
 });
@@ -48,8 +56,29 @@ passport.deserializeUser(function(user, done) {
         done(null, user);
 });
 
+//Whenever someone connects this gets executed
+io.on('connection', function(socket) {
+   console.log('A user connected');
+  //  console.log(socket.client.request.session);
+   socket.on('chat message', (data) => {
+                console.log('message: ' + data.event_type);
+                // console.log(socket.request.session.username + ' connected');
+                // console.log(socket.client.request.session);
+
+                // socket.join(data.interest);
+                // io.sockets.in('hockey').emit('chat message', {message: data.message});
+                io.sockets.emit('chat message', {message: data.event_type});
+              });
+
+   //Whenever someone disconnects this piece of code executed
+   socket.on('disconnect', function () {  
+      console.log('A user disconnected');
+   });
+});
+
 // Routes
 app.get("/", function(req, res) {
+  // If uses is already loggedin then redirect??
   res.render("index");
 });
 
@@ -66,36 +95,9 @@ app.get("/home", function(req, res) {
     {"username":"kabhi", "interest":"football", "description":null},
     {"username":"jabhi", "interest":"cricket", "description":null},
     {"username":"tabhi", "interest":"squash", "description":null}]
+    // A hot_events list can be used for carousel
     res.render("home", {events: event_list});
   }
-});
-
-// Access the session as req.session
-// app.get('/login', function(req, res) {
-//   var sess = req.session;
-//   if (typeof sess.user === 'undefined') {
-//     user++;
-//     req.session.user = user;
-//   }
-//   res.end(
-//       req.session.user.toString() +
-//       ' is logged in, please go to the /discussion page.');
-// });
-
-//Whenever someone connects this gets executed
-io.on('connection', function(socket) {
-   console.log('A user connected');
-
-   socket.on('chat message', (data) => {
-                console.log('message: ' + data.message);
-                socket.join(data.interest);
-                io.sockets.in('hockey').emit('chat message', {message: data.message});
-              });
-
-   //Whenever someone disconnects this piece of code executed
-   socket.on('disconnect', function () {  
-      console.log('A user disconnected');
-   });
 });
 
 app.get('/discussion', function(req, res) {
@@ -107,7 +109,7 @@ app.get('/discussion', function(req, res) {
     // res.write('<p>user: ' + sess.user + '</p>');
     // res.write('<p>expires in: ' + (sess.cookie.maxAge / 1000) + 's</p>');
     // res.end();
-    res.render("discussion");
+    res.render("discussion", {interests: JSON.stringify(req.session.interests)});
   }
 });
 
@@ -148,6 +150,7 @@ app.get("/interest", function(req, res){
 app.post("/interest", function(req, res) {
   // push to dataset
   req.session.interests = ["cricket", "hockey"];
+  // req.session.save();
   res.redirect("/home");
 });
 
@@ -174,11 +177,22 @@ app.post("/avatar", function(req, res){
   let username_valid = true;
   if (username_valid) {
     req.session.username = username;
-    console.log(req.session.username);
+    // req.session.save();
+    // console.log(req.session.username);
     res.redirect("/interest");
   } else {
     res.end();
   }
 });
 
+app.get("/addevent", function(req, res) {
+  // var username = req.session.username;
+  res.render("addevent");
+});
+
+app.post("/addevent", function(req, res) {
+  var username = req.session.username;
+  var event_type = req.body.event_type;
+
+});
 server.listen(port, () => {console.log(`Example app listening on port ${port}`)})

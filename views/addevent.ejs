@@ -1,0 +1,32 @@
+<html>
+    <body>
+        <form action="/addevent" method="post" id="form">
+            <input type="text" name="event_type" id="event_type">
+            <button type="submit">Submit</button>
+        </form>
+        <script src = "/socket.io/socket.io.js"></script>
+        <script>
+          const socket = io();
+          var form = document.getElementById('form');
+          var event_type= document.getElementById('event_type');
+
+          form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (event_type.value) {
+                console.log(event_type.value);
+                socket.emit('chat message', {event_type: event_type.value});
+            //   input.value = '';
+            }
+            });
+
+        //   socket.on('chat message', function(data) {
+        //     var item = document.createElement('li');
+        //     item.textContent = data.message;
+        //     messages.appendChild(item);
+        //     window.scrollTo(0, document.body.scrollHeight);
+        //   });
+
+        </script>
+    
+    </body>
+</html>

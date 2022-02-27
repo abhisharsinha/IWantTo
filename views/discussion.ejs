@@ -7,31 +7,20 @@
     <body>
 
         <ul id="messages"></ul>
-        <form id="form" action="">
-            <input id="input" autocomplete="off" />
-            <input id="interest" autocomplete="off" /><button>Send</button>
-        </form>
         <script src = "/socket.io/socket.io.js"></script>
         <script>
           const socket = io();
-          var form = document.getElementById('form');
-          var input = document.getElementById('input');
-          var interest = document.getElementById('interest');
           var messages = document.getElementById('messages');
-
-          form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (input.value) {
-              socket.emit('chat message', {message: input.value, interest: interest.value});
-              input.value = '';
-            }
-            });
-
+          var interests = <%- interests %>
+          var interests = new Set(interests);
+          console.log(interests);
           socket.on('chat message', function(data) {
-            var item = document.createElement('li');
-            item.textContent = data.message;
-            messages.appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
+            if (interests.has(data.message) == true) {
+              var item = document.createElement('li');
+              item.textContent = data.message;
+              messages.appendChild(item);
+              window.scrollTo(0, document.body.scrollHeight);
+            }
           });
 
         </script>
