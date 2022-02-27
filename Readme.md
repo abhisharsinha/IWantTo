@@ -146,8 +146,7 @@ _Installation depedency_
   ```sh
   npm install googleapis@39 --save
   ```
-12. Updeate node.js
-```sh
+12. Update node.js and npm to latest version
 
   or to install them all run
   ```sh
