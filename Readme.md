@@ -102,7 +102,7 @@ npm is the basic and most required package needed
 
 _Installation depedency_
 
-1. Get a free API Key at [https://console.developers.google.com/apis](https://console.developers.google.com/apis)
+1. Get a free API Key at [https://console.developers.google.com/apis](https://console.developers.google.com/apis)(https://support.google.com/cloud/answer/6158849?hl=en)
 2. Clone the repo
    ```sh
    git clone https://github.com/abhisharsinha/IWantTo.git
