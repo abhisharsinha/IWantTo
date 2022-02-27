@@ -153,8 +153,6 @@ _Installation depedency_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-For all the npm dependencies, you can run dependencies.sh file.
-
 ## Setting up the database 
 
 ```sh 
