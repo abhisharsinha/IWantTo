@@ -83,6 +83,7 @@
     color: #555;
     font-size: 15px;
     font-weight: 700;
+    background-color: whitesmoke;
   }
   
   .form-row .value {
@@ -702,7 +703,7 @@
     text-transform: uppercase;
     font-weight: 700;
     text-align: center;
-    color: #fff;
+    color: #aaa;
   }
   
   /* ==========================================================================
