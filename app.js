@@ -13,6 +13,15 @@ const cookieSession = require('cookie-session');
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
 
+// To parse the html request
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+)
+app.use(express.json())
+
+// For authentication
 app.use(cookieSession({
   name: 'google-auth-session',
   keys: ['key1', 'key2']
@@ -20,14 +29,6 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(session({secret: "trial"}))
-
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-)
-
-app.use(express.json())
 
 passport.use(new GoogleStrategy({
     clientID:"1074242406000-60kbrbt2fmdfsrvkmo259qu638266lqo.apps.googleusercontent.com",
@@ -47,9 +48,7 @@ passport.deserializeUser(function(user, done) {
         done(null, user);
 });
 
-// Make sure this is defined before any of your routes
-// that make use of the session.
-
+// Routes
 app.get("/", function(req, res) {
   res.render("index");
 });
@@ -63,7 +62,11 @@ app.get("/home", function(req, res) {
   } else if (typeof req.session.interests === "undefined") {
     res.redirect('/interest');
   } else {
-    res.render("home");
+    var event_list = [{"username":"abhi", "interest":"hockey", "description":null}, 
+    {"username":"kabhi", "interest":"football", "description":null},
+    {"username":"jabhi", "interest":"cricket", "description":null},
+    {"username":"tabhi", "interest":"squash", "description":null}]
+    res.render("home", {events: event_list});
   }
 });
 
@@ -167,10 +170,15 @@ app.get("/avatar", function(req, res) {
 app.post("/avatar", function(req, res){
   var username = req.body.username;
   // Verify if the username using db
-  console.log(req.body);
-  req.session.username = username;
-  console.log(req.session.username);
-  res.redirect("/interest");
+  // console.log(req.body);
+  let username_valid = true;
+  if (username_valid) {
+    req.session.username = username;
+    console.log(req.session.username);
+    res.redirect("/interest");
+  } else {
+    res.end();
+  }
 });
 
 server.listen(port, () => {console.log(`Example app listening on port ${port}`)})
