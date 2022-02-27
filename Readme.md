@@ -74,7 +74,7 @@
 ## About The Project
 
 
-This project is design to allow users of an orginization to explore their intrest in various field, It also allows user to create network with their peers.
+This project is design to allow users of an orginization to explore their interest in various field, It also allows user to create network with their peers.
 
 Here's why:
 * Allows you to see get associated with events of your choice
@@ -191,7 +191,7 @@ This will start your application in backend into port 8000 which will provide si
 http://localhost:8000
 ```
 
-This will land you to sign page once login via you institute google id explore the App.
+This will land you to sign page once login via your institute google id explore the App.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
