@@ -152,9 +152,11 @@ _Installation depedency_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+For all the npm dependencies, you can run dependencies.sh file.
+
 ## Setting up the database 
 
-
+Run the run.sh file
 
 ## How to run the application
 
@@ -265,7 +267,7 @@ Project Link: [https://github.com/abhisharsinha/IWantTo](https://github.com/abhi
 
 This space is to acknowledge a few entities that we find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
-* [Lambada](https://github.com/LambdaIITH)
+* [Lambda](https://github.com/LambdaIITH)
 * [Milan](https://gymkhana.iith.ac.in/milanhome.html)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
