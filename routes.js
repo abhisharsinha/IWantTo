@@ -2,6 +2,8 @@ var express = require('express');
 var passport = require('passport');
 var app = express.Router();
 const { Pool,Client } = require('pg');
+
+// Add credentials acccording to your postgres connection
 const credentials = {
     user: "postgres",
     host: "localhost",
