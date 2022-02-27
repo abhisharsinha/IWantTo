@@ -9,10 +9,7 @@ const credentials = {
     password: "codechef",
     port: 5432
 };
-var event_list = [{"username":"abhi", "interest":"hockey", "description":null}, 
-{"username":"kabhi", "interest":"football", "description":null},
-{"username":"jabhi", "interest":"cricket", "description":null},
-{"username":"tabhi", "interest":"squash", "description":null}]
+
 const client = new Pool(credentials);
 
 app.get("/", function(req, res) {
@@ -198,16 +195,39 @@ app.get("/home", async function(req, res) {
   });
   
 
-  app.get("/addevent", function(req, res) {
+  app.get("/events", async function(req, res) {
+    console.log(req.url)
+    var activity = req.url.split("?");
+    console.log(activity[1]);
+    var result = await client.query(`SELECT * FROM events where interest=$1`, [parseInt(activity[1])]);
+    console.log(result.rows);
+    res.render("event", {events: result.rows})
+  });
+
+  app.get("/addevent", async function(req, res) {
     // var username = req.session.username;
-    res.render("addevent");
+    var activities = await client.query(`SELECT * FROM ACTIVITY`);
+    res.render("form", {activities: activities.rows});
   });
   
-  app.post("/addevent", function(req, res) {
-    var username = req.session.username;
-    var event_type = req.body.event_type;
-  
-  });
+  app.post("/addevent", async function(req, res) {
+    // var username = req.session.username;
+    var username = "abhishar";
+    var result = await client.query(`SELECT * FROM users where username = $1`, [username]);
+    var userid = result.rows[0].id;
+    var event_type = req.body.interest;
+    var title = req.body.title;
+    var online = false;
+    if (req.body.offline == 0) {
+        online = true;
+    }
+    var description = req.body.description;
+    // var event_type = req.body.event_type;
+    console.log(req.body);
+    console.log([parseInt(userid), title, description, online, event_type])
+    await client.query(`insert into events (user_id, title, description, event_time, online, interest) values ($1, $2, $3, current_time, $4, $5)`, [parseInt(userid), title, description, online, event_type]);
+    res.redirect("/events")
+  });  
 
   module.exports = app;
   
