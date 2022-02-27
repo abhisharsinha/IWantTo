@@ -227,8 +227,8 @@ app.get("/home", async function(req, res) {
     // var event_type = req.body.event_type;
     console.log(req.body);
     console.log([parseInt(userid), title, description, online, event_type])
-    await client.query(`insert into events (user_id, title, description, event_time, online, interest) values ($1, $2, $3, current_time, $4, $5)`, [parseInt(userid), title, description, online, event_type]);
-    res.redirect("/events")
+    await client.query(`insert into events (user_id, title, description, event_time, online, interest) values ($1, $2, $3, current_time, $4, $5)`, [parseInt(userid), title, description, online, parseInt(event_type)]);
+    res.redirect("/home")
   });  
 
   module.exports = app;
