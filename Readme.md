@@ -90,13 +90,13 @@ Here's why:
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [Next.js](https://nextjs.org/)
+* [Node.js](https://nodejs.org/en/)
 * [HTML](https://www.w3schools.com/html/)
 * [CSS](https://www.w3schools.com/css/)
 * [Postman](https://www.postman.com/)
-* [postgresql](https://www.postgresql.org/)
+* [Postgresql](https://www.postgresql.org/)
 * [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [JavaScript](https://www.w3schools.com/js/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -121,7 +121,7 @@ This is an example of how to list things you need to use the software and how to
 
 _Installation depedency_
 
-1. Get a free API Key at [https://example.com](https://example.com)
+1. Get a free API Key at [https://console.developers.google.com/apis](https://console.developers.google.com/apis)
 2. Clone the repo
    ```sh
    git clone https://github.com/abhisharsinha/IWantTo.git
@@ -132,8 +132,8 @@ _Installation depedency_
    ```
 4. Enter your Google OAUTH API in `config.js`
    ```js
-   const PUBLIC_KEY = 'ENTER YOUR API';
-   const SECRET_KEY
+   const CLIENT_ID = 'ENTER YOUR Client ID';
+   const CLIENT_SECRET = 'ENTER YOUR Client secret'
    ```
 5. Install postgresql
 <a href="https://phoenixnap.com/kb/how-to-install-postgresql-on-ubuntu"> Postgresql</a>
@@ -229,7 +229,30 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `https://choosealicense.com/licenses/mit/` for more information.
+Distributed under the MIT License. See `https://gist.github.com/RubingHan/7154917` for more information.
+
+```text
+Copyright (C) 2022 IITH Student community
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -246,7 +269,7 @@ Gayala Manoj - cs19btech11011@iith.ac.in
 
 Keval Malde - cs20mtech01003@iith.ac.in
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/abhisharsinha/IWantTo](https://github.com/abhisharsinha/IWantTo)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -255,7 +278,7 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+This space is to acknowledge few entities that we find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
 * [Lambada](https://github.com/LambdaIITH)
 * [Milan](https://gymkhana.iith.ac.in/milanhome.html)
@@ -275,7 +298,4 @@ Use this space to list resources you find helpful and would like to give credit 
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/abhisharsinha/IWantTo/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+[license-url]: https://choosealicense.com/licenses/mit/
