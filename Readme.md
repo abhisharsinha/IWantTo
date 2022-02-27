@@ -1,23 +1,4 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -74,7 +55,7 @@
 ## About The Project
 
 
-This project is design to allow users of an orginization to explore their interest in various field, It also allows user to create network with their peers.
+This project is designed to allow users of an organization to explore their interest in various fields, It also allows users to create a network with their peers.
 
 Here's why:
 * Allows you to see get associated with events of your choice
@@ -110,10 +91,10 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-npm is basic and most required package needed
+npm is the basic and most required package needed
 * npm
   ```sh
-  apt install nmp 
+  apt install npm
   npm install npm@latest -g
   ```
 
@@ -175,9 +156,9 @@ _Installation depedency_
 
 
 
-## How to run application
+## How to run the application
 
-Once all the depedency are met and keys are provided following steps are helpful
+Once all the dependency are met and keys are provided following steps are helpful
 ```sh
 cd IWantTo
 node app.js
@@ -185,13 +166,13 @@ node app.js
 
 This will start your application in backend into port 8000 which will provide site internet access, then do the following
 
-1. Open your bowser (preferably chrome)
+1. Open your browser (preferably chrome)
 2. In your URL type the following
 ```sh
 http://localhost:8000
 ```
 
-This will land you to sign page once login via your institute google id explore the App.
+This will land you to sign page once you log in via your institute google id to explore the App.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -215,7 +196,7 @@ See the [open issues](https://github.com/abhisharsinha/IWantTo/issues) for a ful
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -253,8 +234,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
@@ -282,7 +263,7 @@ Project Link: [https://github.com/abhisharsinha/IWantTo](https://github.com/abhi
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-This space is to acknowledge few entities that we find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+This space is to acknowledge a few entities that we find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
 * [Lambada](https://github.com/LambdaIITH)
 * [Milan](https://gymkhana.iith.ac.in/milanhome.html)
@@ -303,3 +284,4 @@ This space is to acknowledge few entities that we find helpful and would like to
 [issues-url]: https://github.com/abhisharsinha/IWantTo/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://choosealicense.com/licenses/mit/
+
