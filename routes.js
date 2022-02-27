@@ -9,48 +9,24 @@ const credentials = {
     password: "codechef",
     port: 5432
 };
-
+var event_list = [{"username":"abhi", "interest":"hockey", "description":null}, 
+{"username":"kabhi", "interest":"football", "description":null},
+{"username":"jabhi", "interest":"cricket", "description":null},
+{"username":"tabhi", "interest":"squash", "description":null}]
 const client = new Pool(credentials);
 
 app.get("/", function(req, res) {
     res.render("index");
   });
   
-  app.get("/home", async function(req, res) {
+app.get("/home", async function(req, res) {
     var sess = req.session.passport;
-    if (typeof sess === 'undefined') {
+    if (typeof sess === 'undefined' || typeof req.session.username === 'undefined' || typeof req.session.interests === 'undefined') {
       res.redirect('/');
     } 
-    else{
-        var email = sess.user.email;
-        var result = await client.query(`SELECT USERNAME FROM USERS WHERE EMAIL = $1`, [email]);
-        if(result.rows.length != 0)
-            req.session.username = result.rows[0]['username']
-        
-        var result = await client.query(`SELECT NAME FROM USERS,ACTIVITY,INTERESTS WHERE 
-                                            USERS.ID = INTERESTS.UID AND INTERESTS.AID = ACTIVITY.ID;`)
-        
-        if(result.row.length != 0)
-        {
-            req.session.interests = []
-            for(var i=0;i<result.row.length;i++)
-            {
-                req.session.interests.append(result.row[0]['name'])
-            }
-        }                                   
-    }
     
-    if (typeof req.session.username === "undefined") {
-      res.redirect('/avatar');
-    } else if (typeof req.session.interests === "undefined") {
-      res.redirect('/interest');
-    } else {
-      var event_list = [{"username":"abhi", "interest":"hockey", "description":null}, 
-      {"username":"kabhi", "interest":"football", "description":null},
-      {"username":"jabhi", "interest":"cricket", "description":null},
-      {"username":"tabhi", "interest":"squash", "description":null}]
-      res.render("home", {events: event_list});
-    }
+    var result = await client.query("SELECT NAME FROM ACTIVITY;")
+    res.render("home", {events: result.rows});
   });
   
   // Access the session as req.session
@@ -89,7 +65,7 @@ app.get("/", function(req, res) {
     }),
     function (req, res) {
       console.log("Success login")
-      res.redirect('/home')
+      res.redirect('/avatar')
   });
   
   app.get("/logout", function(req, res){
@@ -98,45 +74,95 @@ app.get("/", function(req, res) {
     res.redirect('/');
   });
   
-  app.get("/interest", function(req, res){
+  app.get("/interest", async function(req, res) {
     var sess = req.session.passport;
-    if (typeof sess === 'undefined') {
+    if (typeof sess === 'undefined' || typeof req.session.username === 'undefined') {
       res.redirect('/');
-    } else if (typeof req.session.username === "undefined") {
-      res.redirect("/avatar");
-    } else if (typeof req.session.interests === "undefined") {
-      res.render("interest", {name: sess.user.given_name});
-    } else {
-      // If the user had added interests earlier then goto home
-      res.redirect("/home");
+    }else if (typeof req.session.interests === "undefined") {
+
+      var result = await client.query(`SELECT AID FROM USERS, INTERESTS WHERE USERNAME = $1 AND USERS.ID = INTERESTS.UID`, [req.session.username]);
+    
+      if(result.rows.length != 0)
+      {
+        req.session.interests = []
+        for(var i=0;i<result.rows.length;i++)
+        {
+          req.session.interests.push(result.rows[i]['aid'])
+        }
+
+        res.redirect('/home')
+      }
+      else{
+        var activities = await client.query(`SELECT * FROM ACTIVITY`);
+        res.render("interest", {name: sess.user.given_name, activities: activities.rows});
+      } 
+    }
+    else{
+      res.redirect('/home');
     }
   });
   
-  app.post("/interest", function(req, res) {
+  app.post("/interest", async function(req, res) {
     // push to dataset
-    req.session.interests = ["cricket", "hockey"];
-    interests = req.session.interests;
+    // req.session.interests = ["cricket", "hockey"];
+    // interests = req.session.interests;
+    var user_interests = req.body;
+    
+    interest_ids = []
+    for( let i in user_interests)
+      interest_ids.push(user_interests[i])
 
+    console.log(interest_ids);
+    var username = req.session.username;
+    var result = await client.query(`SELECT ID FROM USERS WHERE USERNAME = $1`, [username]);
+    var userid = result.rows[0].id;
+    
+    let interests_valid = true;
+    try{
+    for (var i=0; i<interest_ids.length; i++) {
+        await client.query(`INSERT INTO INTERESTS (UID, AID, PRIOR) VALUES ($1, $2, $3)`, [parseInt(userid), parseInt(interest_ids[i]),i+1]);
+    }
+    }catch (err){
+      console.log("Duplicate interests error");
+      interests_valid = false;
+    }
 
-    res.redirect("/home");
+    if(interests_valid)
+    {
+      req.session.interests = interest_ids;
+      res.redirect("/home");
+    }
+    else{
+      res.render("interest", {name: sess.user.given_name, activities: activities.rows});
+    }
+
   });
   
   app.get("/avatar", async function(req, res) {
     var sess = req.session.passport;
     
-    var username = req.session.username;
+    // var username = req.session.username;
     var fname = sess.user.given_name
     var lname = sess.user.family_name;
     var email = sess.user.email;
 
     if (typeof sess === 'undefined') {
       res.redirect('/');
-    } else if (typeof username === "undefined") {
-        res.render("avatar", {fname: fname,
-          lname: lname,
-          email: email});
-    }  else {
-      res.redirect("interest");
+    } else if (typeof req.session.username === 'undefined'){
+        var email = sess.user.email;
+        var result = await client.query(`SELECT * FROM USERS WHERE EMAIL = $1`, [email]);
+        
+        if(result.rows.length != 0) {
+            req.session.username = result.rows[0]['username']
+            res.redirect("/interest");
+        } else {
+            res.render("avatar", {fname: fname,
+                lname: lname,
+                email: email});
+        }
+    }
+    else{
+      res.redirect("/interest");
     }
   });
   
@@ -152,10 +178,10 @@ app.get("/", function(req, res) {
     try{
         await client.query(`INSERT INTO USERS (username, first_name, last_name, email) 
                     VALUES ($1,$2,$3,$4);`,[username,fname,lname,email])
-    }catch(err) {
+    } catch(err) {
         console.log("Duplicate key error");
         username_valid = false;
-        res.send("Username already exists!");
+        // res.send("Username already exists!");
     }
     
     // Verify if the username using db
@@ -163,12 +189,11 @@ app.get("/", function(req, res) {
 
     if (username_valid) {
       req.session.username = username;
-      console.log(req.session.username);
       res.redirect("/interest");
     } else {
         res.render("avatar", {fname: fname,
             lname: lname,
-            email: email});
+            email: email, error: true});
     }
   });
   
