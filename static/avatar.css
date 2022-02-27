@@ -1,3 +1,9 @@
 .container {
   max-width: 960px;
 }
+
+
+/* Right-aligned section inside the top navigation */
+.topnav-right {
+  float: right;
+}
