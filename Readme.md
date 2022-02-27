@@ -38,6 +38,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#database">Setting up the database</a></li>
       </ul>
     </li>
     <li><a href="#usage">How to run application</a></li>
