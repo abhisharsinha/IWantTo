@@ -107,48 +107,49 @@ _Installation depedency_
    ```sh
    git clone https://github.com/abhisharsinha/IWantTo.git
    ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your Google OAUTH API in `config.js`
+3. Enter your Google OAUTH API in `config.js`
    ```js
    const CLIENT_ID = 'ENTER YOUR Client ID';
    const CLIENT_SECRET = 'ENTER YOUR Client secret'
    ```
-5. Install postgresql
+4. Install postgresql
 <a href="https://phoenixnap.com/kb/how-to-install-postgresql-on-ubuntu"> Postgresql</a>
 
-6. Install express
+5. Install express
   ```sh
   npm install express
   npm install express-studio
   ```
-7. Install passport
+6. Install passport
   ```sh
   npm install passport
   npm install passport-google-oauth2
   ```
-8. Install socket
+7. Install socket
   ```sh
   npm install socket.io
   ```
-9. Install Cookie
+8. Install Cookie
   ```sh
   nmp install cookie-session
   ```
-10. Install ejs
+9. Install ejs
   ```sh
   npm install ejs
   ```
-11. Install pg
+10. Install pg
   ```sh
   npm install pg
   ```
-12. Install google APIs
+11. Install google APIs
   ```sh
   npm install googleapis@39 --save
   ```
+  or to install them all run
+  ```sh
+   sh requirements.sh
+  ```
+  
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -156,7 +157,9 @@ For all the npm dependencies, you can run dependencies.sh file.
 
 ## Setting up the database 
 
-Run the run.sh file
+```sh 
+bash run.sh
+```
 
 ## How to run the application
 
