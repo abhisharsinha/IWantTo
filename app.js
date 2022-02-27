@@ -10,6 +10,9 @@ var user = 0
 var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const cookieSession = require('cookie-session');
+const routes = require('./routes')
+
+
 app.set('view engine', 'ejs');
 app.use("/static", express.static('static'));
 
@@ -48,7 +51,9 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
       return done(null, profile);
-    }));
+    }
+  
+));
 passport.serializeUser(function(user, done) {
         done(null, user);
 });
@@ -58,141 +63,26 @@ passport.deserializeUser(function(user, done) {
 
 //Whenever someone connects this gets executed
 io.on('connection', function(socket) {
-   console.log('A user connected');
-  //  console.log(socket.client.request.session);
-   socket.on('chat message', (data) => {
-                console.log('message: ' + data.event_type);
-                // console.log(socket.request.session.username + ' connected');
-                // console.log(socket.client.request.session);
+  console.log('A user connected');
+ //  console.log(socket.client.request.session);
+  socket.on('chat message', (data) => {
+               console.log('message: ' + data.event_type);
+               // console.log(socket.request.session.username + ' connected');
+               // console.log(socket.client.request.session);
 
-                // socket.join(data.interest);
-                // io.sockets.in('hockey').emit('chat message', {message: data.message});
-                io.sockets.emit('chat message', {message: data.event_type});
-              });
+               // socket.join(data.interest);
+               // io.sockets.in('hockey').emit('chat message', {message: data.message});
+               io.sockets.emit('chat message', {message: data.event_type});
+             });
 
-   //Whenever someone disconnects this piece of code executed
-   socket.on('disconnect', function () {  
-      console.log('A user disconnected');
-   });
+  //Whenever someone disconnects this piece of code executed
+  socket.on('disconnect', function () {  
+     console.log('A user disconnected');
+  });
 });
 
+app.use('/', routes);
 // Routes
-app.get("/", function(req, res) {
-  // If uses is already loggedin then redirect??
-  res.render("index");
-});
 
-app.get("/home", function(req, res) {
-  var sess = req.session.passport;
-  if (typeof sess === 'undefined') {
-    res.redirect('/');
-  } else if (typeof req.session.username === "undefined") {
-    res.redirect('/avatar');
-  } else if (typeof req.session.interests === "undefined") {
-    res.redirect('/interest');
-  } else {
-    var event_list = [{"username":"abhi", "interest":"hockey", "description":null}, 
-    {"username":"kabhi", "interest":"football", "description":null},
-    {"username":"jabhi", "interest":"cricket", "description":null},
-    {"username":"tabhi", "interest":"squash", "description":null}]
-    // A hot_events list can be used for carousel
-    res.render("home", {events: event_list});
-  }
-});
-
-app.get('/discussion', function(req, res) {
-  var sess = req.session.passport;
-  if (typeof sess === 'undefined') {
-    res.redirect('/');
-  } else {
-    // res.setHeader('Content-Type', 'text/html');
-    // res.write('<p>user: ' + sess.user + '</p>');
-    // res.write('<p>expires in: ' + (sess.cookie.maxAge / 1000) + 's</p>');
-    // res.end();
-    res.render("discussion", {interests: JSON.stringify(req.session.interests)});
-  }
-});
-
-app.get('/google',
-  passport.authenticate('google', { scope:
-      [ 'email', 'profile' ] }
-));
-
-app.get( '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/',
-  }),
-  function (req, res) {
-    console.log("Success login")
-    res.redirect('/home')
-});
-
-app.get("/logout", function(req, res){
-  req.session = null;
-  req.logout();
-  res.redirect('/');
-});
-
-app.get("/interest", function(req, res){
-  var sess = req.session.passport;
-  if (typeof sess === 'undefined') {
-    res.redirect('/');
-  } else if (typeof req.session.username === "undefined") {
-    res.redirect("/avatar");
-  } else if (typeof req.session.interests === "undefined") {
-    res.render("interest", {name: sess.user.given_name});
-  } else {
-    // If the user had added interests earlier then goto home
-    res.redirect("/home");
-  }
-});
-
-app.post("/interest", function(req, res) {
-  // push to dataset
-  req.session.interests = ["cricket", "hockey"];
-  // req.session.save();
-  res.redirect("/home");
-});
-
-app.get("/avatar", function(req, res) {
-  var sess = req.session.passport;
-  if (typeof sess === 'undefined') {
-    res.redirect('/');
-  } else if (typeof req.session.username === "undefined") {
-      res.render("avatar", {fname: sess.user.given_name,
-        lname: sess.user.family_name,
-        email: sess.user.email,
-        pic: sess.user.picture});
-  }  else {
-    // If the user had filled the details earlier
-    // then don't goto avatar
-    res.redirect("interest");
-  }
-});
-
-app.post("/avatar", function(req, res){
-  var username = req.body.username;
-  // Verify if the username using db
-  // console.log(req.body);
-  let username_valid = true;
-  if (username_valid) {
-    req.session.username = username;
-    // req.session.save();
-    // console.log(req.session.username);
-    res.redirect("/interest");
-  } else {
-    res.end();
-  }
-});
-
-app.get("/addevent", function(req, res) {
-  // var username = req.session.username;
-  res.render("addevent");
-});
-
-app.post("/addevent", function(req, res) {
-  var username = req.session.username;
-  var event_type = req.body.event_type;
-
-});
-server.listen(port, () => {console.log(`Example app listening on port ${port}`)})
+server.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)})
