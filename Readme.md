@@ -171,6 +171,10 @@ _Installation depedency_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Setting up the database 
+
+
+
 ## How to run application
 
 Once all the depedency are met and keys are provided following steps are helpful
