@@ -11,7 +11,8 @@ var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const cookieSession = require('cookie-session');
 app.set('view engine', 'ejs');
-app.use(express.static('static'));
+app.use('/static', express.static('static'));
+
 
 // To parse the html request
 app.use(
